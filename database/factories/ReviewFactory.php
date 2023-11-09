@@ -14,6 +14,7 @@ class ReviewFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
     public function definition(): array
     {
         return [
@@ -21,7 +22,9 @@ class ReviewFactory extends Factory
             'review' => fake()->paragraph,
             'rating' => fake()->numberBetween(1, 5),
             'created_at' => fake()->dateTimeBetween('-2 years'),
-            'updated_at' => fake()->dateTimeBetween('created_at', 'now'),
+            'updated_at' => function (array $attributes) {
+                return fake()->dateTimeBetween($attributes['created_at'], 'now');
+            },
         ];
     }
 
