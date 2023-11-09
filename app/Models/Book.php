@@ -21,8 +21,20 @@ class Book extends Model
         return $query->where('title', 'LIKE', '%' . $title .'%');
     }
 
-    public function scopePopular(Builder $query): Builder|QueryBuilder {
-        return $query->withCount('reviews')->orderBy('reviews_count', 'desc');
+    public function scopePopular(Builder $query, $from = null, $to = null): Builder|QueryBuilder {
+        return $query->withCount([
+            'reviews' => function (Builder $q) use ($from, $to) {
+                if ($from && !$to) {
+                    $q->where('created_at', '>=', $from);
+                } elseif (!$from && $to) {
+                    $q->where('created_at', '<=', $to);
+                } elseif ($from && $to) {
+                    $q->whereBetween('created_at', [$from, $to]);
+                }
+        }
+
+        ])
+        ->orderBy('reviews_count', 'desc');
     }
 
     public function scopeHighestRated(Builder $query): Builder|QueryBuilder {
