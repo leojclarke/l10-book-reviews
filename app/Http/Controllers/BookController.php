@@ -16,7 +16,7 @@ class BookController extends Controller
         $filter = $request->input("filter", '');
         $books = Book::when(
             $title,
-            fn($query, $title) => $query->title($title)
+            fn ($query, $title) => $query->title($title)
         );
         $books = match ($filter) {
             'popular_last_month' => $books->popularLastMonth(),
@@ -49,9 +49,15 @@ class BookController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Book $book)
     {
-        //
+
+        return view(
+            'books.show',
+            ['book' => $book->load([
+                'reviews' => fn ($query) => $query->latest()
+            ])]
+        );
     }
 
     /**
