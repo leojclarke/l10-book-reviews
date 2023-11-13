@@ -62,14 +62,14 @@ class Book extends Model
         }
     }
 
-    public function scopePopularLastMonth(Builder $query ): Builder|QueryBuilder
+    public function scopePopularLastMonth(Builder $query): Builder|QueryBuilder
     {
         return $query->popular(now()->subMonth(), now())
             ->highestRated(now()->subMonth(), now())
             ->minReviews(2);
     }
 
-    public function scopePopularLast6Months(Builder $query ): Builder|QueryBuilder
+    public function scopePopularLast6Months(Builder $query): Builder|QueryBuilder
     {
         return $query->popular(now()->subMonths(6), now())
             ->highestRated(now()->subMonths(6), now())
@@ -88,5 +88,11 @@ class Book extends Model
         return $query->highestRated(now()->subMonths(6), now())
             ->popular(now()->subMonths(6), now())
             ->minReviews(5);
+    }
+
+    protected static function booted()
+    {
+        static::updated(fn (Book $book) => cache()->forget('book:' . $book->id));
+        static::deleted(fn (Book $book) => cache()->forget('book:' . $book->id));
     }
 }
