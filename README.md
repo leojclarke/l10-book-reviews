@@ -7,3 +7,14 @@
 ## About
 
 A simple book list application based on **Project #2** in the ["Master Laravel 10 for Beginners & Intermediate 2023"](https://www.udemy.com/course/laravel-beginner-fundamentals/) course by _Piotr Jura_
+
+### Future Enhancements
+
+A few enhancements that are planned for the future
+
+-   Add pagination
+-   Add error handling
+-   Implement Bootstrap 5 styling
+-   Add a success flash message when an action was completed
+-   Add `edit` review functionality
+-   Add `delete` review functionality
